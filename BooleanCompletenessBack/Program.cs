@@ -11,6 +11,14 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowTimeWeb",
+        policy => policy.WithOrigins("https://boolbomb.site") // твой домен
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+});
+
 
 builder.Services.AddCors(options =>
 {
@@ -29,14 +37,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("AllowTimeWeb",
-        policy => policy.WithOrigins("https://boolbomb.site") // твой домен
-                        .AllowAnyHeader()
-                        .AllowAnyMethod());
-});
-
+app.UseRouting();
 // После app.UseRouting();
 app.UseCors("AllowTimeWeb");
 
