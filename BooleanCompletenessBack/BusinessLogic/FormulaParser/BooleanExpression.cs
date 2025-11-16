@@ -36,9 +36,7 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
             var parser = new Parser(tokens);
             _rpn = parser.ToRPN();
         }
-
-        // Сбрасывает флаг, который хранит то,
-        // было ли выражение изменено.
+        
         public void ClearChanged()
         {
             _changed = false;
@@ -120,7 +118,7 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
         {
             var vars = paramNames ?? _variablesInOrder;
             var numVars = vars.Count;
-            var numRows = 1 << numVars; // 2^n
+            var numRows = 1 << numVars; 
             var table = new List<List<bool>>();
 
             for (int i = 0; i < numRows; i++)
@@ -232,7 +230,6 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
                     }
                     if (oper == "→")
                     {
-                        // Заменяем A → B на ¬A ∨ B
                         var notLeft = new UnaryNode("¬", binary.Left);
                         return new BinaryNode("∨", notLeft, binary.Right);
                     }
@@ -503,7 +500,6 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
 
             if (node is BinaryNode binary)
             {
-                // Рекурсия
                 var (newLeft, appliedLeft) = ApplyIdempotenceInAstOnce(binary.Left);
                 binary.Left = newLeft;
 
@@ -516,7 +512,6 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
                 {
                     var allTerms = GetTerms(binary, binary.Operator);
 
-                    // Нахождение дубликатов
                     int? dupIndex = null;
                     for (int i = 0; i < allTerms.Count; i++)
                     {
@@ -780,7 +775,6 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
 
             if (node is BinaryNode binary)
             {
-                //Рекурсивный
                 var (newLeft, appliedLeft) = ApplyAbsorptionInAstOnce(binary.Left);
                 binary.Left = newLeft;
 
@@ -813,12 +807,11 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
                 FoundAbsorption:
                     if (absorbI.HasValue && absorbJ.HasValue)
                     {
-                        // Remove the absorbed term j
                         var newTerms = terms.Where((t, k) => k != absorbJ.Value).ToList();
                         ExpressionNode rebuilt;
                         if (newTerms.Count == 0)
                         {
-                            rebuilt = new ConstantNode(false); // Should not happen for ∨
+                            rebuilt = new ConstantNode(false); 
                         }
                         else if (newTerms.Count == 1)
                         {
@@ -916,45 +909,6 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
             return (resNode, true);
 
         }
-
-            /*  if (node is ConstantNode)
-                  return (node, false);
-
-              if (node is VariableNode)
-                  return (node, false);
-
-              if (node is UnaryNode unary)
-              {
-                  var (newOperand, applied) = ApplyRemoveDuplicateInAstOnce(unary.Operand);
-                  if (applied)
-                  {
-                      unary.Operand = newOperand;
-                      return (unary, true);
-                  }
-                  return (unary, false);
-              }
-
-              if (node is BinaryNode binary)
-              {
-                  if (binary.Operator == "∨" && NodesEqual(binary.Left, binary.Right))
-                  {
-                      return (binary.Left, true);
-                  }
-
-                  var (newLeft, appliedLeft) = ApplyRemoveDuplicateInAstOnce(binary.Left);
-                  if (appliedLeft)
-                  {
-                      binary.Left = newLeft;
-                      return (binary, true);
-                  }
-
-                  var (newRight, appliedRight) = ApplyRemoveDuplicateInAstOnce(binary.Right);
-                  binary.Right = newRight;
-                  return (binary, appliedRight);
-              }
-
-              return (node, false);
-          }*/
 
             public bool SortConjuncts()
 
@@ -1183,13 +1137,10 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
             return result;
         }
 
-        // CombineConjuncts объединяет конъюнкты conjuncts операцией конъюнкции
         private ExpressionNode CombineConjuncts(List<ExpressionNode> conjuncts)
         {
             return CombineWith(conjuncts, "∧");
         }
-
-        // CombineDisjuncts объединяет дизъюнкты disjuncts операцией дизъюнкции
         private ExpressionNode CombineDisjuncts(List<ExpressionNode> disjuncts)
         {
             return CombineWith(disjuncts, "∨");
@@ -1373,8 +1324,6 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
 
         }
 
-
-        //Возвращает максимальное число опреандов конюнкции учитывая все конъюнкции либо вырадения
         public int GetMaxOperandsInConjunctions()
         {
             var ast = BuildAstFromRpn();
