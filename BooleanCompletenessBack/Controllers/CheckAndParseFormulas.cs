@@ -13,16 +13,6 @@ namespace BooleanCompletenessBack.Controllers
     [ApiController]
     public class CheckAndParseFormulasController : ControllerBase
     {
-        // get  НЕ ПОЗВОЛЯЕТ  (payload === json-строка)
-
-        // GET /CheckAndParseFormulas?name=Masha&age=18&payload=%5B'apple'%2C%20'banana'%5D
-
-        // Restful ---- HTTP не по основному назначению:
-
-        // GET --- получить объект (через query-параметры)   (РАЗРЕШЕНО КЕШИРОВАТЬ ОТВЕТЫ)
-        // POST --- изменить/добавит (отправляет данные в теле запроса)
-
-        // ['x v y', '']
 
         [HttpPost]
         public IActionResult CheckAndParseFormulas([FromBody] List<string> formulas)
@@ -32,17 +22,6 @@ namespace BooleanCompletenessBack.Controllers
             {
                 throw new ClientException("Число функций не должно быть больше 5");
             }
-                // List<string> a = ['apple', 'banana'];
-
-                // string.Join(чем_объединить, что объединяем);
-
-                // string.Join(":", a); // "apple:banana"
-
-                // ":".Join(a); 
-
-                // string -> int
-                // 1. int.Parse("25")
-                // 2. Convert.ToInt32("25")
 
                 Console.WriteLine($"Formulas: {string.Join(", ", formulas)}");
 
@@ -60,43 +39,16 @@ namespace BooleanCompletenessBack.Controllers
 
 
                 var varsCombiner = new VarsCombiner(expressions);
-
-                // Все переменные системы булевых функций.
-                // f1(a, b), f2(a, c) -> systemVars = ["a", "b", "c"]
+                
                 var systemVars = varsCombiner.Combine();
             if(systemVars.Count > maxVarsLimit)
             {
                 throw new ClientException($"Общее число переменных не должно превышать {maxVarsLimit}");
             }
-
-                // 1<<systemVars.Count <=> 2 ** systemVars.Count
-                //
-                // Число строк в таблице истинности.
-
-                //   0110 << 1
-                // = 1100
-                //
-                //   0110 << 2
-                // = 1000
-                //
-                // a << b   <->   a * 2**b
-                //
-                // (int) Math.Pow(2, b)
                 int rowsCount = 1 << systemVars.Count;
 
-                // Таблица истинности будет содержать systemVars.Count для значений переменных и
-                // expressions.Count столбцов для значений функций согласно формулам.
-                //
-                // truthTable = [
-                //    a  b  c  f1 f2
-                //   [0, 0, 0, ?, ?],
-                //   [0, 0, 1, ?, ?],
-                //   [0, 1, 0, ?, ?],
-                //   ...
-                // ]
                 int[,] truthTable = new int[rowsCount, systemVars.Count + expressions.Count];
 
-                // Задаём значения параметров ((0, 0, 0), (0, 0, 1), (0, 1, 0), ...)
                 var expr0Table = expressions[0].GetTruthTable(systemVars);
                 for (int i = 0; i < rowsCount; i++)
                 {
@@ -106,7 +58,6 @@ namespace BooleanCompletenessBack.Controllers
                     }
                 }
 
-                // Задаём значения функций
                 for (int i = 0; i < expressions.Count; i++)
                 {
                     var expr = expressions[i];
