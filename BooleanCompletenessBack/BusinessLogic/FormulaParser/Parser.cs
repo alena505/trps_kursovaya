@@ -108,7 +108,6 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
                     stackCount -= arity;
                     stackCount++;
                 }
-                // Игнорируем другие типы (не должны появляться в ОПЗ)
             }
 
             if (stackCount != 1)
