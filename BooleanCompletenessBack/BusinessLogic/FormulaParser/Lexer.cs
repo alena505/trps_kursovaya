@@ -11,7 +11,6 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
             "∧", "∨", "¬", "→", "↔", "⊕", "↓", "↑", "↛", "↮"
         };
 
-        //Пропускаем лишние пробелы
         public Lexer(string input)
         {
             _input = input.Replace(" ", ""); 
