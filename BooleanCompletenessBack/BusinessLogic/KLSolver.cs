@@ -21,7 +21,7 @@ namespace BooleanCompletenessBack.BuisnessLogic
             return new KLResult
             {
                 TriangleMethod = pascalMethodSolver.Solve(),
-                AnalyticalMethod = analyticalNethodSolver?.Solve(), //синтаксис который вернет null если это равно null есди не равно то вызовется метод Solve и вернет то что возвращает Solve
+                AnalyticalMethod = analyticalNethodSolver?.Solve(), 
             };
         }
     }
