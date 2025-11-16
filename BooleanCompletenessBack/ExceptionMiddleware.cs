@@ -35,11 +35,9 @@ namespace BooleanCompletenessBack
 
             catch (Exception ex)
             {
-                // Логируем полный стек-трейс на консоль (или в logger)
                 _logger.LogError(ex, "Unhandled exception occurred: {Message}", ex.Message);
-                Console.WriteLine(ex.ToString());  // Полный стек на консоль
+                Console.WriteLine(ex.ToString());
 
-                // Устанавливаем статус 500 и возвращаем JSON
                 httpContext.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 httpContext.Response.ContentType = "application/json";
 
