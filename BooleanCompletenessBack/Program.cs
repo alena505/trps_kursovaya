@@ -29,6 +29,17 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowTimeWeb",
+        policy => policy.WithOrigins("https://boolbomb.site") // твой домен
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+});
+
+// После app.UseRouting();
+app.UseCors("AllowTimeWeb");
+
 app.UseExceptionMiddleware();
 
 app.UseHttpsRedirection();
