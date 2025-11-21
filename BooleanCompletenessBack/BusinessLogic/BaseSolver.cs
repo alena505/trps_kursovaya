@@ -15,7 +15,7 @@ namespace BooleanCompletenessBack.BusinessLogic
 
             if ((int)Math.Pow(2, paramsCount) != funcValues.Length)
             {
-                throw new Exception($"2**paramsCount should be squa to funcValues.Length");
+                throw new Exception($"2**paramsCount должно быть квадратом funcValues.Length");
             }
             this.funcValues = funcValues;
             this.paramsCount = paramsCount;
