@@ -65,7 +65,7 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
                 if (token.Type == TokenType.Variable)
                 {
                     if (!valueDict.TryGetValue(token.Value, out bool val))
-                        throw new Exception($"Missing value for variable {token.Value}");
+                        throw new Exception($"Пропущено значение для переменной {token.Value}");
                     stack.Push(val);
                 }
                 else if (token.Type == TokenType.Operator)
@@ -159,13 +159,13 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
                 {
                     if (_unaryOps.Contains(token.Value))
                     {
-                        if (stack.Count < 1) throw new Exception("Invalid RPN");
+                        if (stack.Count < 1) throw new Exception("Некорректный RPN");
                         var operand = stack.Pop();
                         stack.Push(new UnaryNode(token.Value, operand));
                     }
                     else
                     {
-                        if (stack.Count < 2) throw new Exception("Invalid RPN");
+                        if (stack.Count < 2) throw new Exception("Некорректный RPN");
                         var right = stack.Pop();
                         var left = stack.Pop();
                         stack.Push(new BinaryNode(token.Value, left, right));
@@ -173,7 +173,7 @@ namespace BooleanCompletenessBack.BusinessLogic.FormulaParser
                 }
             }
 
-            if (stack.Count != 1) throw new Exception("Invalid expression");
+            if (stack.Count != 1) throw new Exception("Некорректное выражение");
             return stack.Pop();
         }
 
